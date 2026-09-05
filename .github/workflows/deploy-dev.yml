@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.DEV_SSH_USER }}
           key: ${{ secrets.DEV_SSH_KEY }}
           source: "docker-compose.yml"
-          target: "/opt/todo/backend"
+          target: "/home/ubuntu/todo/backend"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
@@ -58,6 +58,6 @@ jobs:
           username: ${{ secrets.DEV_SSH_USER }}
           key: ${{ secrets.DEV_SSH_KEY }}
           script: |
-            cd /opt/todo/backend
+            cd /home/ubuntu/todo/backend
             docker compose pull backend
             docker compose up -d backend
