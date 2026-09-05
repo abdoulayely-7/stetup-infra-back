@@ -1,0 +1,26 @@
+services:
+  backend:
+    image: ${DOCKERHUB_USERNAME}/todo-back:latest
+    container_name: todo-back
+    restart: unless-stopped
+    env_file:
+      - .env
+    # Traefik gère le routage — pas de ports exposés directement
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # Route HTTP — redirige vers HTTPS automatiquement
+      - "traefik.http.routers.todo-back.rule=Host(`api.evalprx.org`)"
+      - "traefik.http.routers.todo-back.entrypoints=web"
+      - "traefik.http.routers.todo-back.middlewares=redirect-https"
+      # Route HTTPS avec certificat Let's Encrypt
+      - "traefik.http.routers.todo-back-secure.rule=Host(`api.evalprx.org`)"
+      - "traefik.http.routers.todo-back-secure.entrypoints=websecure"
+      - "traefik.http.routers.todo-back-secure.tls=true"
+      - "traefik.http.routers.todo-back-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.todo-back.loadbalancer.server.port=8080"
+
+networks:
+  traefik-net:
+    external: true
