@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ${DOCKERHUB_USERNAME}/todo-back:latest
+    image: ${DOCKERHUB_USERNAME}/todo-back:dev
     container_name: todo-back
     restart: unless-stopped
     env_file:
